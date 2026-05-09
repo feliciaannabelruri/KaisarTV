@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Dashboard — KaisarTV Content-to-Inbound</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="app-style.css"/>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M8 6L16 12L8 18V6Z" fill="white"/></svg></div>
+    <div class="logo-text">KaisarTV<span>Content-to-Inbound</span></div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Menu</div>
+    <a class="nav-item active" href="dashboard.html">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Dashboard
+    </a>
+    <a class="nav-item" href="content.html">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 10l4.553-2.069A1 1 0 0121 8.82V15.18a1 1 0 01-1.447.89L15 14M3 8a2 2 0 012-2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"/></svg>
+      Content Library
+    </a>
+    <a class="nav-item" href="clips.html">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.121 14.121L19 19M6.343 17.657A8 8 0 1117.657 6.343 8 8 0 016.343 17.657z"/><circle cx="12" cy="12" r="3"/></svg>
+      Clip & Angle Mapper
+    </a>
+    <a class="nav-item" href="distribution.html">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z"/></svg>
+      Distribution Planner
+    </a>
+    <a class="nav-item" href="inbound.html">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+      Inbound Tracker
+    </a>
+    <a class="nav-item" href="review.html">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      Review & Insight
+    </a>
+  </nav>
+
+</aside>
+
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-left">
+      <h1>Dashboard</h1>
+      <p>Overview sistem Content-to-Inbound · Pilot Aktif</p>
+    </div>
+    <div class="topbar-right">
+      <button class="btn btn-ghost btn-sm" onclick="resetSeed()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"></polyline><polyline points="23 20 23 14 17 14"></polyline><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path></svg> Reset Demo Data</button>
+      <div class="mobile-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+    </div>
+  </div>
+
+  <div class="page-content">
+
+    <!-- KPI CARDS -->
+    <div class="kpi-grid" id="kpi-grid"></div>
+
+    <!-- THIS WEEK + RECENT INBOUND -->
+    <div class="two-col" style="margin-bottom:20px">
+      <div class="card">
+        <div class="card-header">
+          <div><div class="card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg> Jadwal Minggu Ini</div><div class="card-subtitle">Distribusi yang harus diposting</div></div>
+          <a href="distribution.html" class="btn btn-ghost btn-sm">Lihat Semua</a>
+        </div>
+        <div class="card-body" id="this-week-list"></div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div><div class="card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg> Inbound Terbaru</div><div class="card-subtitle">Yang masuk belum lama</div></div>
+          <a href="inbound.html" class="btn btn-ghost btn-sm">Lihat Semua</a>
+        </div>
+        <div class="card-body" id="recent-inbound-list"></div>
+      </div>
+    </div>
+
+    <!-- PIPELINE STATUS + TOP CLIPS -->
+    <div class="two-col">
+      <div class="card">
+        <div class="card-header"><div class="card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg> Pipeline Status</div></div>
+        <div class="card-body" id="pipeline-chart"></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg> Top Angle (by Inbound)</div></div>
+        <div class="card-body" id="top-angles"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="toast-wrap" id="toast-wrap"></div>
+
+<script src="db.js"></script>
+<script>
+DB.seed();
+
+function renderKPIs() {
+  const s = DB.getStats();
+  const inbounds = DB.getInbounds();
+  const newCount = inbounds.filter(i => i.status === 'new').length;
+  document.getElementById('kpi-grid').innerHTML = `
+    <div class="kpi-card kpi-orange">
+      <div class="kpi-top"><span class="kpi-label">Total Konten</span><div class="kpi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect><line x1="7" y1="2" x2="7" y2="22"></line><line x1="17" y1="2" x2="17" y2="22"></line><line x1="2" y1="12" x2="22" y2="12"></line><line x1="2" y1="7" x2="7" y2="7"></line><line x1="2" y1="17" x2="7" y2="17"></line><line x1="17" y1="17" x2="22" y2="17"></line><line x1="17" y1="7" x2="22" y2="7"></line></svg></div></div>
+      <div class="kpi-val">${s.contents}</div>
+      <div class="kpi-sub">${s.clips} clips dipetakan</div>
+    </div>
+    <div class="kpi-card kpi-blue">
+      <div class="kpi-top"><span class="kpi-label">Distribusi</span><div class="kpi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg></div></div>
+      <div class="kpi-val">${s.posted}</div>
+      <div class="kpi-sub">${s.scheduled} scheduled minggu ini</div>
+    </div>
+    <div class="kpi-card kpi-green">
+      <div class="kpi-top"><span class="kpi-label">Total Inbound</span><div class="kpi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg></div></div>
+      <div class="kpi-val">${s.inbounds}</div>
+      <div class="kpi-sub">${s.hot} hot leads · ${s.deals} deals</div>
+    </div>
+    <div class="kpi-card kpi-red">
+      <div class="kpi-top"><span class="kpi-label">Perlu Follow Up</span><div class="kpi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg></div></div>
+      <div class="kpi-val">${newCount}</div>
+      <div class="kpi-sub">Inbound belum dikontrak</div>
+    </div>`;
+}
+
+function renderThisWeek() {
+  const items = DB.getScheduledThisWeek();
+  const el = document.getElementById('this-week-list');
+  if (!items.length) { el.innerHTML = `<div class="empty-state"><div class="empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></div><div class="empty-title">Tidak ada jadwal minggu ini</div><div class="empty-sub">Tambahkan distribution plan</div><a href="distribution.html" class="btn btn-primary btn-sm">+ Tambah</a></div>`; return; }
+  el.innerHTML = items.map(d => `
+    <div style="padding:12px 0;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:12px">
+      <div style="flex:1">
+        <div style="font-size:13px;font-weight:600;margin-bottom:4px">${d.clipAngle||'Clip'}</div>
+        <div style="font-size:12px;color:var(--muted)">${d.contentTitle||''}</div>
+      </div>
+      <div style="text-align:right;flex-shrink:0">
+        <span class="badge badge-${d.platform}">${d.platform}</span>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px">${fmtDate(d.date)}</div>
+      </div>
+    </div>`).join('');
+}
+
+function renderRecentInbound() {
+  const items = DB.getInbounds().slice(0,5);
+  const el = document.getElementById('recent-inbound-list');
+  if (!items.length) { el.innerHTML = `<div class="empty-state"><div class="empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div><div class="empty-title">Belum ada inbound</div><a href="inbound.html" class="btn btn-primary btn-sm">+ Catat Inbound</a></div>`; return; }
+  el.innerHTML = items.map(i => `
+    <div style="padding:12px 0;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px">
+      <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--orange),var(--red));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0">${(i.name||'?')[0].toUpperCase()}</div>
+      <div style="flex:1">
+        <div style="font-size:13px;font-weight:600">${i.name} <span style="font-weight:400;color:var(--muted)">· ${i.company||''}</span></div>
+        <div style="font-size:12px;color:var(--muted);margin-top:2px">${i.platform} · ${fmtDate(i.date)}</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
+        <span class="badge badge-${i.quality}">${i.quality}</span>
+        <span class="badge badge-${i.status}">${i.status}</span>
+      </div>
+    </div>`).join('');
+}
+
+function renderPipeline() {
+  const inbounds = DB.getInbounds();
+  const stages = [
+    { key:'new', label:'New', color:'var(--blue)' },
+    { key:'contacted', label:'Contacted', color:'var(--orange)' },
+    { key:'deal', label:'Deal', color:'var(--green)' },
+    { key:'pass', label:'Pass', color:'var(--muted)' }
+  ];
+  const total = inbounds.length || 1;
+  document.getElementById('pipeline-chart').innerHTML = `
+    <div class="bar-chart-h">
+      ${stages.map(s => {
+        const count = inbounds.filter(i => i.status === s.key).length;
+        return `<div class="bar-h-item">
+          <div class="bar-h-label">${s.label}</div>
+          <div class="bar-h-track"><div class="bar-h-fill" style="width:${count/total*100}%;background:${s.color}"></div></div>
+          <div class="bar-h-val">${count}</div>
+        </div>`;
+      }).join('')}
+    </div>`;
+}
+
+function renderTopAngles() {
+  const angles = DB.getInboundByAngle().slice(0,5);
+  const max = angles[0]?.[1] || 1;
+  document.getElementById('top-angles').innerHTML = angles.length ? `
+    <div class="bar-chart-h">
+      ${angles.map(([angle, count]) => `
+        <div class="bar-h-item">
+          <div class="bar-h-label" title="${angle}">${angle}</div>
+          <div class="bar-h-track"><div class="bar-h-fill" style="width:${count/max*100}%"></div></div>
+          <div class="bar-h-val">${count}</div>
+        </div>`).join('')}
+    </div>` : `<div class="empty-state"><div class="empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></div><div class="empty-title">Data belum cukup</div></div>`;
+}
+
+function fmtDate(d) { if (!d) return ''; try { return new Date(d).toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'}); } catch(e) { return d; } }
+
+function resetSeed() {
+  if (!confirm('Reset semua data ke demo data awal?')) return;
+  localStorage.removeItem('ktv_seeded');
+  ['ktv_contents','ktv_clips','ktv_dists','ktv_inbounds'].forEach(k => localStorage.removeItem(k));
+  DB.seed();
+  renderAll();
+  showToast('Demo data di-reset!', 'success');
+}
+
+function showToast(msg, type='info') {
+  const t = document.createElement('div');
+  t.className = `toast ${type}`; t.textContent = msg;
+  document.getElementById('toast-wrap').appendChild(t);
+  setTimeout(() => t.remove(), 3000);
+}
+
+function renderAll() { renderKPIs(); renderThisWeek(); renderRecentInbound(); renderPipeline(); renderTopAngles(); }
+renderAll();
+</script>
+</body>
+</html>

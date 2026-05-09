@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Clip & Angle Mapper — KaisarTV</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="app-style.css"/>
+</head>
+<body>
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M8 6L16 12L8 18V6Z" fill="white"/></svg></div>
+    <div class="logo-text">KaisarTV<span>Content-to-Inbound</span></div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Menu</div>
+    <a class="nav-item" href="dashboard.html"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Dashboard</a>
+    <a class="nav-item" href="content.html"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 10l4.553-2.069A1 1 0 0121 8.82V15.18a1 1 0 01-1.447.89L15 14M3 8a2 2 0 012-2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"/></svg>Content Library</a>
+    <a class="nav-item active" href="clips.html"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>Clip & Angle Mapper</a>
+    <a class="nav-item" href="distribution.html"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z"/></svg>Distribution Planner</a>
+    <a class="nav-item" href="inbound.html"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Inbound Tracker</a>
+    <a class="nav-item" href="review.html"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Review & Insight</a>
+  </nav>
+
+</aside>
+
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-left"><h1>Clip & Angle Mapper</h1><p>Petakan momen terbaik dari konten long-form ke short-form clips</p></div>
+    <div class="topbar-right">
+      <button class="btn btn-primary" onclick="openModal()">+ Tambah Clip</button>
+      <div class="mobile-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+    </div>
+  </div>
+  <div class="page-content">
+    <div class="filter-row mb-20">
+      <select id="filter-content" onchange="render()">
+        <option value="">Semua Konten</option>
+      </select>
+      <select id="filter-objective" onchange="render()">
+        <option value="">Semua Objective</option>
+        <option value="awareness">Awareness</option>
+        <option value="lead">Lead Generation</option>
+        <option value="positioning">Positioning</option>
+      </select>
+      <select id="filter-status" onchange="render()">
+        <option value="">Semua Status</option>
+        <option value="draft">Draft</option>
+        <option value="ready">Ready</option>
+        <option value="distributed">Distributed</option>
+      </select>
+    </div>
+    <div id="clips-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px"></div>
+    <div id="empty-clips" style="display:none"><div class="empty-state"><div class="empty-icon"><svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="6" r="3"></circle><circle cx="6" cy="18" r="3"></circle><line x1="20" y1="4" x2="8.12" y2="15.88"></line><line x1="14.47" y1="14.48" x2="20" y2="20"></line><line x1="8.12" y1="8.12" x2="12" y2="12"></line></svg></div><div class="empty-title">Belum ada clip</div><div class="empty-sub">Pilih konten dan tambahkan clip pertama</div><button class="btn btn-primary" onclick="openModal()">+ Tambah Clip</button></div></div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <button class="modal-close-btn" onclick="closeModal()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+    <div class="modal-title" id="modal-title">Tambah Clip</div>
+    <div class="modal-sub">Petakan momen terbaik dari konten long-form</div>
+    <input type="hidden" id="edit-id"/>
+    <div class="form-grid">
+      <div class="form-group span2">
+        <label>Pilih Konten</label>
+        <select id="f-content"><option value="">-- Pilih Konten --</option></select>
+      </div>
+      <div class="form-group">
+        <label>Timestamp Mulai</label>
+        <input type="text" id="f-ts-start" placeholder="00:02:10"/>
+      </div>
+      <div class="form-group">
+        <label>Timestamp Selesai</label>
+        <input type="text" id="f-ts-end" placeholder="00:03:45"/>
+      </div>
+      <div class="form-group span2">
+        <label>Angle / Judul Clip</label>
+        <input type="text" id="f-angle" placeholder="Contoh: Problem yang sering diabaikan brand soal monetisasi"/>
+      </div>
+      <div class="form-group span2">
+        <label>Hook Opening</label>
+        <textarea id="f-hook" placeholder='"Kebanyakan brand salah ukur ROI konten mereka..."'></textarea>
+      </div>
+      <div class="form-group">
+        <label>Objective</label>
+        <select id="f-objective">
+          <option value="awareness">Awareness</option>
+          <option value="lead">Lead Generation</option>
+          <option value="positioning">Positioning</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Status</label>
+        <select id="f-status">
+          <option value="draft">Draft</option>
+          <option value="ready">Ready</option>
+          <option value="distributed">Distributed</option>
+        </select>
+      </div>
+      <div class="form-group span2">
+        <label>Target Audience</label>
+        <input type="text" id="f-audience" placeholder="Contoh: Marketing Manager, CEO startup, Brand partnership team"/>
+      </div>
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-ghost" onclick="closeModal()">Batal</button>
+      <button class="btn btn-primary" onclick="saveClip()">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-wrap" id="toast-wrap"></div>
+
+<script src="db.js"></script>
+<script>
+DB.seed();
+
+const objColors = { awareness:'var(--blue)', lead:'var(--orange)', positioning:'var(--green)' };
+const statusOrder = { draft:0, ready:1, distributed:2 };
+
+function populateContentFilters() {
+  const contents = DB.getContents();
+  const opts = contents.map(c => `<option value="${c.id}">${c.title}</option>`).join('');
+  document.getElementById('filter-content').innerHTML = `<option value="">Semua Konten</option>${opts}`;
+  document.getElementById('f-content').innerHTML = `<option value="">-- Pilih Konten --</option>${opts}`;
+  const params = new URLSearchParams(window.location.search);
+  const cid = params.get('contentId');
+  if (cid) { document.getElementById('filter-content').value = cid; document.getElementById('f-content').value = cid; }
+}
+
+function render() {
+  const fContent = document.getElementById('filter-content').value;
+  const fObj = document.getElementById('filter-objective').value;
+  const fStat = document.getElementById('filter-status').value;
+  let clips = DB.getClips().filter(cl => {
+    return (!fContent || cl.contentId === fContent) && (!fObj || cl.objective === fObj) && (!fStat || cl.status === fStat);
+  });
+  clips.sort((a,b) => (statusOrder[a.status]||0) - (statusOrder[b.status]||0));
+  const grid = document.getElementById('clips-grid');
+  const empty = document.getElementById('empty-clips');
+  if (!clips.length) { grid.innerHTML=''; empty.style.display=''; return; }
+  empty.style.display='none';
+  const dists = DB.getDists();
+  grid.innerHTML = clips.map(cl => {
+    const distCount = dists.filter(d => d.clipId === cl.id).length;
+    return `<div class="card" style="display:flex;flex-direction:column">
+      <div style="padding:20px 20px 0">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+          <div style="display:flex;gap:6px">
+            <span class="badge badge-${cl.objective}">${cl.objective}</span>
+            <span class="badge badge-${cl.status}">${cl.status}</span>
+          </div>
+          <div style="display:flex;gap:4px">
+            <button class="btn btn-ghost btn-sm btn-icon" onclick="editClip('${cl.id}')" title="Edit"><svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></button>
+            <button class="btn btn-danger btn-sm btn-icon" onclick="deleteClip('${cl.id}')" title="Hapus"><svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></button>
+          </div>
+        </div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:6px"><svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> ${cl.tsStart} – ${cl.tsEnd} · ${cl.contentTitle||''}</div>
+        <div style="font-size:15px;font-weight:700;line-height:1.4;margin-bottom:10px">${cl.angle||'—'}</div>
+        ${cl.hook ? `<div style="font-size:13px;color:var(--muted);font-style:italic;border-left:2px solid ${objColors[cl.objective]||'var(--orange)'};padding-left:10px;line-height:1.5;margin-bottom:12px">${cl.hook}</div>` : ''}
+        ${cl.audience ? `<div style="font-size:12px;color:var(--muted)"><svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg> ${cl.audience}</div>` : ''}
+      </div>
+      <div style="margin-top:auto;padding:14px 20px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
+        <span style="font-size:12px;color:var(--muted)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg> ${distCount} distribusi</span>
+        <a href="distribution.html?clipId=${cl.id}" class="btn btn-primary btn-sm">Buat Distribusi →</a>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function openModal(prefillContentId) {
+  document.getElementById('modal-title').textContent = 'Tambah Clip';
+  document.getElementById('edit-id').value = '';
+  ['f-angle','f-hook','f-audience','f-ts-start','f-ts-end'].forEach(id => document.getElementById(id).value='');
+  document.getElementById('f-objective').value='awareness';
+  document.getElementById('f-status').value='draft';
+  const fContent = document.getElementById('filter-content').value;
+  document.getElementById('f-content').value = prefillContentId || fContent || '';
+  document.getElementById('modal').classList.add('open');
+}
+
+function editClip(id) {
+  const cl = DB.getClips().find(c=>c.id===id); if(!cl) return;
+  document.getElementById('modal-title').textContent='Edit Clip';
+  document.getElementById('edit-id').value=id;
+  document.getElementById('f-content').value=cl.contentId||'';
+  document.getElementById('f-ts-start').value=cl.tsStart||'';
+  document.getElementById('f-ts-end').value=cl.tsEnd||'';
+  document.getElementById('f-angle').value=cl.angle||'';
+  document.getElementById('f-hook').value=cl.hook||'';
+  document.getElementById('f-objective').value=cl.objective||'awareness';
+  document.getElementById('f-status').value=cl.status||'draft';
+  document.getElementById('f-audience').value=cl.audience||'';
+  document.getElementById('modal').classList.add('open');
+}
+
+function closeModal() { document.getElementById('modal').classList.remove('open'); }
+
+function saveClip() {
+  const contentId = document.getElementById('f-content').value;
+  const angle = document.getElementById('f-angle').value.trim();
+  if (!contentId) { showToast('Pilih konten dulu!','error'); return; }
+  if (!angle) { showToast('Angle wajib diisi!','error'); return; }
+  const content = DB.getContent(contentId);
+  const data = { contentId, contentTitle: content?.title||'', tsStart: document.getElementById('f-ts-start').value, tsEnd: document.getElementById('f-ts-end').value, angle, hook: document.getElementById('f-hook').value, objective: document.getElementById('f-objective').value, status: document.getElementById('f-status').value, audience: document.getElementById('f-audience').value };
+  const editId = document.getElementById('edit-id').value;
+  if (editId) { DB.updateClip(editId, data); showToast('Clip diupdate!','success'); }
+  else { DB.addClip(data); showToast('Clip ditambahkan!','success'); }
+  closeModal(); render();
+}
+
+function deleteClip(id) {
+  if (!confirm('Hapus clip ini?')) return;
+  DB.deleteClip(id); showToast('Clip dihapus','info'); render();
+}
+
+function showToast(msg, type='info') {
+  const t = document.createElement('div'); t.className=`toast ${type}`; t.textContent=msg;
+  document.getElementById('toast-wrap').appendChild(t); setTimeout(()=>t.remove(),3000);
+}
+
+populateContentFilters();
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Content Library — KaisarTV</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="app-style.css"/>
+</head>
+<body>
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M8 6L16 12L8 18V6Z" fill="white"/></svg></div>
+    <div class="logo-text">KaisarTV<span>Content-to-Inbound</span></div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Menu</div>
+    <a class="nav-item" href="dashboard.html">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Dashboard
+    </a>
+    <a class="nav-item active" href="content.html">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 10l4.553-2.069A1 1 0 0121 8.82V15.18a1 1 0 01-1.447.89L15 14M3 8a2 2 0 012-2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"/></svg>
+      Content Library
+    </a>
+    <a class="nav-item" href="clips.html">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      Clip & Angle Mapper
+    </a>
+    <a class="nav-item" href="distribution.html">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z"/></svg>
+      Distribution Planner
+    </a>
+    <a class="nav-item" href="inbound.html">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+      Inbound Tracker
+    </a>
+    <a class="nav-item" href="review.html">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      Review & Insight
+    </a>
+  </nav>
+
+</aside>
+
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-left"><h1>Content Library</h1><p>Kelola konten long-form untuk di-clip dan didistribusikan</p></div>
+    <div class="topbar-right">
+      <button class="btn btn-primary" onclick="openModal()">+ Tambah Konten</button>
+      <div class="mobile-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+    </div>
+  </div>
+  <div class="page-content">
+    <div class="filter-row mb-20">
+      <input type="text" id="search" placeholder="Cari judul konten..." oninput="render()"/>
+      <select id="filter-status" onchange="render()">
+        <option value="">Semua Status</option>
+        <option value="active">Active</option>
+        <option value="draft">Draft</option>
+        <option value="review">Review</option>
+      </select>
+    </div>
+    <div class="card">
+      <div class="card-body" style="padding:0">
+        <div class="table-wrap">
+          <table>
+            <thead><tr>
+              <th>Judul</th><th>Durasi</th><th>Upload</th><th>Status</th><th>Clips</th><th>Aksi</th>
+            </tr></thead>
+            <tbody id="content-table"></tbody>
+          </table>
+        </div>
+        <div id="empty-content" style="display:none">
+          <div class="empty-state"><div class="empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect><line x1="7" y1="2" x2="7" y2="22"></line><line x1="17" y1="2" x2="17" y2="22"></line><line x1="2" y1="12" x2="22" y2="12"></line><line x1="2" y1="7" x2="7" y2="7"></line><line x1="2" y1="17" x2="7" y2="17"></line><line x1="17" y1="17" x2="22" y2="17"></line><line x1="17" y1="7" x2="22" y2="7"></line></svg></div><div class="empty-title">Belum ada konten</div><div class="empty-sub">Tambahkan konten long-form pertama kamu</div><button class="btn btn-primary" onclick="openModal()">+ Tambah Konten</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL ADD/EDIT -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <button class="modal-close-btn" onclick="closeModal()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+    <div class="modal-title" id="modal-title">Tambah Konten</div>
+    <div class="modal-sub">Input konten long-form dari Kaisar TV</div>
+    <input type="hidden" id="edit-id"/>
+    <div class="form-grid">
+      <div class="form-group span2">
+        <label>Judul Konten</label>
+        <input type="text" id="f-title" placeholder="Contoh: Strategi Monetisasi Media 2025"/>
+      </div>
+      <div class="form-group span2">
+        <label>Link YouTube</label>
+        <input type="url" id="f-link" placeholder="https://youtube.com/watch?v=..."/>
+      </div>
+      <div class="form-group">
+        <label>Durasi</label>
+        <input type="text" id="f-duration" placeholder="45:22"/>
+      </div>
+      <div class="form-group">
+        <label>Tanggal Upload</label>
+        <input type="date" id="f-date"/>
+      </div>
+      <div class="form-group">
+        <label>Status</label>
+        <select id="f-status">
+          <option value="draft">Draft</option>
+          <option value="active">Active</option>
+          <option value="review">Review</option>
+        </select>
+      </div>
+      <div class="form-group span2">
+        <label>Catatan</label>
+        <textarea id="f-notes" placeholder="Target audience, konteks konten, dll..."></textarea>
+      </div>
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-ghost" onclick="closeModal()">Batal</button>
+      <button class="btn btn-primary" onclick="saveContent()">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast-wrap" id="toast-wrap"></div>
+
+<script src="db.js"></script>
+<script>
+DB.seed();
+
+function render() {
+  const search = document.getElementById('search').value.toLowerCase();
+  const status = document.getElementById('filter-status').value;
+  let items = DB.getContents().filter(c => {
+    const matchQ = !search || c.title?.toLowerCase().includes(search);
+    const matchS = !status || c.status === status;
+    return matchQ && matchS;
+  });
+  const tbody = document.getElementById('content-table');
+  const empty = document.getElementById('empty-content');
+  if (!items.length) { tbody.innerHTML = ''; empty.style.display=''; return; }
+  empty.style.display = 'none';
+  const clips = DB.getClips();
+  tbody.innerHTML = items.map(c => {
+    const clipCount = clips.filter(cl => cl.contentId === c.id).length;
+    return `<tr>
+      <td>
+        <div style="font-weight:600;font-size:14px;margin-bottom:3px">${c.title}</div>
+        ${c.link ? `<a href="${c.link}" target="_blank" style="font-size:11px;color:var(--muted);text-decoration:none"><svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg> YouTube</a>` : ''}
+        ${c.notes ? `<div style="font-size:12px;color:var(--muted);margin-top:4px">${c.notes}</div>` : ''}
+      </td>
+      <td style="color:var(--muted);font-size:13px">${c.duration||'—'}</td>
+      <td style="color:var(--muted);font-size:12px">${fmtDate(c.uploadDate)}</td>
+      <td><span class="badge badge-${c.status||'draft'}">${c.status||'draft'}</span></td>
+      <td>
+        <a href="clips.html?contentId=${c.id}" style="display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:600;color:var(--orange);text-decoration:none">
+          <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="6" r="3"></circle><circle cx="6" cy="18" r="3"></circle><line x1="20" y1="4" x2="8.12" y2="15.88"></line><line x1="14.47" y1="14.48" x2="20" y2="20"></line><line x1="8.12" y1="8.12" x2="12" y2="12"></line></svg> ${clipCount} clip${clipCount!==1?'s':''}
+        </a>
+      </td>
+      <td>
+        <div style="display:flex;gap:6px">
+          <button class="btn btn-ghost btn-sm" onclick="editContent('${c.id}')">Edit</button>
+          <a href="clips.html?contentId=${c.id}" class="btn btn-primary btn-sm">Mapper →</a>
+          <button class="btn btn-danger btn-sm" onclick="deleteContent('${c.id}')"><svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></button>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function fmtDate(d) { if (!d) return '—'; try { return new Date(d).toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'}); } catch(e) { return d; } }
+
+function openModal() {
+  document.getElementById('modal-title').textContent = 'Tambah Konten';
+  document.getElementById('edit-id').value = '';
+  ['f-title','f-link','f-duration','f-notes'].forEach(id => document.getElementById(id).value='');
+  document.getElementById('f-date').value = new Date().toISOString().slice(0,10);
+  document.getElementById('f-status').value = 'active';
+  document.getElementById('modal').classList.add('open');
+}
+
+function editContent(id) {
+  const c = DB.getContent(id); if (!c) return;
+  document.getElementById('modal-title').textContent = 'Edit Konten';
+  document.getElementById('edit-id').value = id;
+  document.getElementById('f-title').value = c.title||'';
+  document.getElementById('f-link').value = c.link||'';
+  document.getElementById('f-duration').value = c.duration||'';
+  document.getElementById('f-date').value = c.uploadDate||'';
+  document.getElementById('f-status').value = c.status||'active';
+  document.getElementById('f-notes').value = c.notes||'';
+  document.getElementById('modal').classList.add('open');
+}
+
+function closeModal() { document.getElementById('modal').classList.remove('open'); }
+
+function saveContent() {
+  const title = document.getElementById('f-title').value.trim();
+  if (!title) { showToast('Judul wajib diisi!','error'); return; }
+  const data = { title, link: document.getElementById('f-link').value, duration: document.getElementById('f-duration').value, uploadDate: document.getElementById('f-date').value, status: document.getElementById('f-status').value, notes: document.getElementById('f-notes').value };
+  const editId = document.getElementById('edit-id').value;
+  if (editId) { DB.updateContent(editId, data); showToast('Konten diupdate!','success'); }
+  else { DB.addContent(data); showToast('Konten ditambahkan!','success'); }
+  closeModal(); render();
+}
+
+function deleteContent(id) {
+  if (!confirm('Hapus konten ini? Clips terkait juga akan terpengaruh.')) return;
+  DB.deleteContent(id); showToast('Konten dihapus','info'); render();
+}
+
+function showToast(msg, type='info') {
+  const t = document.createElement('div'); t.className=`toast ${type}`; t.textContent=msg;
+  document.getElementById('toast-wrap').appendChild(t); setTimeout(()=>t.remove(),3000);
+}
+
+render();
+</script>
+</body>
+</html>

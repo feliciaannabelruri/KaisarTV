@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Inbound Tracker — KaisarTV</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="app-style.css"/>
+</head>
+<body>
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M8 6L16 12L8 18V6Z" fill="white"/></svg></div>
+    <div class="logo-text">KaisarTV<span>Content-to-Inbound</span></div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Menu</div>
+    <a class="nav-item" href="dashboard.html"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Dashboard</a>
+    <a class="nav-item" href="content.html"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 10l4.553-2.069A1 1 0 0121 8.82V15.18a1 1 0 01-1.447.89L15 14M3 8a2 2 0 012-2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"/></svg>Content Library</a>
+    <a class="nav-item" href="clips.html"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>Clip & Angle Mapper</a>
+    <a class="nav-item" href="distribution.html"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z"/></svg>Distribution Planner</a>
+    <a class="nav-item active" href="inbound.html"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Inbound Tracker</a>
+    <a class="nav-item" href="review.html"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Review & Insight</a>
+  </nav>
+
+</aside>
+
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-left"><h1>Inbound Tracker</h1><p>Catat siapa yang masuk, dari konten mana, dan track statusnya</p></div>
+    <div class="topbar-right">
+      <button class="btn btn-primary" onclick="openModal()">+ Catat Inbound</button>
+      <div class="mobile-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div>
+    </div>
+  </div>
+  <div class="page-content">
+
+    <!-- MINI KPIs -->
+    <div class="kpi-grid" id="kpi-grid" style="grid-template-columns:repeat(4,1fr)"></div>
+
+    <div class="filter-row mb-20">
+      <input type="text" id="search" placeholder="Cari nama / perusahaan..." oninput="render()"/>
+      <select id="filter-quality" onchange="render()"><option value="">Semua Kualitas</option><option value="hot">Hot</option><option value="warm">Warm</option><option value="cold">Cold</option></select>
+      <select id="filter-status" onchange="render()"><option value="">Semua Status</option><option value="new">New</option><option value="contacted">Contacted</option><option value="deal">Deal</option><option value="pass">Pass</option></select>
+      <select id="filter-platform" onchange="render()"><option value="">Semua Platform</option><option value="tiktok">TikTok</option><option value="linkedin">LinkedIn</option><option value="reels">Reels</option><option value="shorts">Shorts</option><option value="dm">DM Langsung</option><option value="other">Other</option></select>
+    </div>
+
+    <div class="card">
+      <div class="card-body" style="padding:0">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Lead</th><th>Platform / Konten</th><th>Angle</th><th>Kualitas</th><th>Status</th><th>Tanggal</th><th>Aksi</th></tr></thead>
+            <tbody id="inbound-table"></tbody>
+          </table>
+        </div>
+        <div id="empty-inbound" style="display:none">
+          <div class="empty-state"><div class="empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg></div><div class="empty-title">Belum ada inbound tercatat</div><div class="empty-sub">Catat siapa yang masuk dari konten kamu</div><button class="btn btn-primary" onclick="openModal()">+ Catat Inbound</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL ADD/EDIT -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <button class="modal-close-btn" onclick="closeModal()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+    <div class="modal-title" id="modal-title">Catat Inbound Baru</div>
+    <div class="modal-sub">Siapa yang masuk dari konten mana?</div>
+    <input type="hidden" id="edit-id"/>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Nama</label>
+        <input type="text" id="f-name" placeholder="Nama lead"/>
+      </div>
+      <div class="form-group">
+        <label>Perusahaan / Brand</label>
+        <input type="text" id="f-company" placeholder="PT / Brand / Agency"/>
+      </div>
+      <div class="form-group">
+        <label>Platform Sumber</label>
+        <select id="f-platform">
+          <option value="linkedin">LinkedIn</option>
+          <option value="tiktok">TikTok</option>
+          <option value="reels">Instagram Reels</option>
+          <option value="shorts">YouTube Shorts</option>
+          <option value="dm">DM Langsung</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Tanggal Masuk</label>
+        <input type="date" id="f-date"/>
+      </div>
+      <div class="form-group span2">
+        <label>Konten Sumber</label>
+        <select id="f-content" onchange="onContentChange()"><option value="">-- Pilih Konten --</option></select>
+      </div>
+      <div class="form-group span2">
+        <label>Clip / Angle Sumber</label>
+        <select id="f-clip"><option value="">-- Pilih Clip (opsional) --</option></select>
+      </div>
+      <div class="form-group">
+        <label>Kualitas Lead</label>
+        <select id="f-quality">
+          <option value="hot">Hot</option>
+          <option value="warm">Warm</option>
+          <option value="cold">Cold</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Status</label>
+        <select id="f-status">
+          <option value="new">New</option>
+          <option value="contacted">Contacted</option>
+          <option value="deal">Deal</option>
+          <option value="pass">Pass</option>
+        </select>
+      </div>
+      <div class="form-group span2">
+        <label>Catatan</label>
+        <textarea id="f-notes" placeholder="Konteks, isi percakapan, follow-up berikutnya..."></textarea>
+      </div>
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-ghost" onclick="closeModal()">Batal</button>
+      <button class="btn btn-primary" onclick="saveInbound()">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- DETAIL PANEL -->
+<div class="modal-overlay" id="detail-modal">
+  <div class="modal">
+    <button class="modal-close-btn" onclick="document.getElementById('detail-modal').classList.remove('open')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+    <div id="detail-content"></div>
+  </div>
+</div>
+
+<div class="toast-wrap" id="toast-wrap"></div>
+
+<script src="db.js"></script>
+<script>
+DB.seed();
+
+function renderKPIs() {
+  const inbounds = DB.getInbounds();
+  const hot = inbounds.filter(i=>i.quality==='hot').length;
+  const deals = inbounds.filter(i=>i.status==='deal').length;
+  const newCount = inbounds.filter(i=>i.status==='new').length;
+  document.getElementById('kpi-grid').innerHTML = `
+    <div class="kpi-card kpi-orange"><div class="kpi-top"><span class="kpi-label">Total Inbound</span><div class="kpi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="8 17 12 21 16 17"></polyline><line x1="12" y1="12" x2="12" y2="21"></line><path d="M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.29"></path></svg></div></div><div class="kpi-val">${inbounds.length}</div></div>
+    <div class="kpi-card kpi-red"><div class="kpi-top"><span class="kpi-label">Hot Leads</span><div class="kpi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg></div></div><div class="kpi-val">${hot}</div></div>
+    <div class="kpi-card kpi-green"><div class="kpi-top"><span class="kpi-label">Deals</span><div class="kpi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg></div></div><div class="kpi-val">${deals}</div></div>
+    <div class="kpi-card kpi-blue"><div class="kpi-top"><span class="kpi-label">Perlu Follow Up</span><div class="kpi-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg></div></div><div class="kpi-val">${newCount}</div></div>`;
+}
+
+function render() {
+  const search = document.getElementById('search').value.toLowerCase();
+  const fQ = document.getElementById('filter-quality').value;
+  const fS = document.getElementById('filter-status').value;
+  const fP = document.getElementById('filter-platform').value;
+  let items = DB.getInbounds().filter(i => {
+    const matchQ = !search || (i.name||'').toLowerCase().includes(search) || (i.company||'').toLowerCase().includes(search);
+    return matchQ && (!fQ||i.quality===fQ) && (!fS||i.status===fS) && (!fP||i.platform===fP);
+  });
+  const tbody = document.getElementById('inbound-table');
+  const empty = document.getElementById('empty-inbound');
+  if (!items.length) { tbody.innerHTML=''; empty.style.display=''; return; }
+  empty.style.display='none';
+  tbody.innerHTML = items.map(i => `<tr>
+    <td>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--orange),var(--red));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0">${(i.name||'?')[0].toUpperCase()}</div>
+        <div>
+          <div style="font-weight:600;font-size:13px">${i.name||'—'}</div>
+          <div style="font-size:11px;color:var(--muted)">${i.company||''}</div>
+        </div>
+      </div>
+    </td>
+    <td>
+      <span class="badge badge-${i.platform}">${i.platform}</span>
+      ${i.contentTitle ? `<div style="font-size:11px;color:var(--muted);margin-top:4px">${i.contentTitle.slice(0,30)}…</div>` : ''}
+    </td>
+    <td style="max-width:160px;font-size:12px;color:var(--muted2)">${(i.clipAngle||'—').slice(0,50)}${(i.clipAngle||'').length>50?'…':''}</td>
+    <td><span class="badge badge-${i.quality}">${i.quality}</span></td>
+    <td>
+      <select style="background:transparent;border:none;cursor:pointer;font-size:11px;font-weight:700;color:var(--text)" onchange="updateStatus('${i.id}',this.value)">
+        ${['new','contacted','deal','pass'].map(s=>`<option value="${s}" ${i.status===s?'selected':''}>${s}</option>`).join('')}
+      </select>
+    </td>
+    <td style="font-size:12px;color:var(--muted)">${fmtDate(i.date)}</td>
+    <td>
+      <div style="display:flex;gap:4px">
+        <button class="btn btn-ghost btn-sm" onclick="showDetail('${i.id}')">Detail</button>
+        <button class="btn btn-ghost btn-sm" onclick="editInbound('${i.id}')">Edit</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteInbound('${i.id}')"><svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></button>
+      </div>
+    </td>
+  </tr>`).join('');
+  renderKPIs();
+}
+
+function showDetail(id) {
+  const i = DB.getInbounds().find(x=>x.id===id); if(!i) return;
+  document.getElementById('detail-content').innerHTML = `
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px">
+      <div style="width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,var(--orange),var(--red));display:flex;align-items:center;justify-content:center;font-weight:800;font-size:20px">${(i.name||'?')[0].toUpperCase()}</div>
+      <div><div style="font-size:18px;font-weight:700">${i.name||'—'}</div><div style="font-size:13px;color:var(--muted)">${i.company||''}</div></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px">
+      <div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Platform</div><span class="badge badge-${i.platform}">${i.platform}</span></div>
+      <div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Tanggal</div><div style="font-size:13px">${fmtDate(i.date)}</div></div>
+      <div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Kualitas</div><span class="badge badge-${i.quality}">${i.quality}</span></div>
+      <div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Status</div><span class="badge badge-${i.status}">${i.status}</span></div>
+    </div>
+    ${i.contentTitle ? `<div style="margin-bottom:12px"><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Sumber Konten</div><div style="font-size:13px">${i.contentTitle}</div>${i.clipAngle?`<div style="font-size:12px;color:var(--muted);margin-top:2px">Clip: ${i.clipAngle}</div>`:''}</div>` : ''}
+    ${i.notes ? `<div><div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Catatan</div><div style="background:var(--glass);border:1px solid var(--border);border-radius:10px;padding:14px;font-size:13px;line-height:1.7;color:var(--muted2)">${i.notes}</div></div>` : ''}
+    <div style="margin-top:20px;display:flex;gap:10px">
+      <button class="btn btn-primary" onclick="editInbound('${i.id}');document.getElementById('detail-modal').classList.remove('open')">Edit</button>
+      <button class="btn btn-ghost" onclick="document.getElementById('detail-modal').classList.remove('open')">Tutup</button>
+    </div>`;
+  document.getElementById('detail-modal').classList.add('open');
+}
+
+function populateContentSelect() {
+  const contents = DB.getContents();
+  document.getElementById('f-content').innerHTML = `<option value="">-- Pilih Konten --</option>` + contents.map(c => `<option value="${c.id}">${c.title}</option>`).join('');
+}
+
+function onContentChange() {
+  const contentId = document.getElementById('f-content').value;
+  const clips = DB.getClips().filter(cl => cl.contentId === contentId);
+  document.getElementById('f-clip').innerHTML = `<option value="">-- Pilih Clip (opsional) --</option>` + clips.map(cl => `<option value="${cl.id}">${cl.angle}</option>`).join('');
+}
+
+function updateStatus(id, status) { DB.updateInbound(id, {status}); render(); showToast(`Status: ${status}`,'success'); }
+
+function openModal() {
+  document.getElementById('modal-title').textContent='Catat Inbound Baru';
+  document.getElementById('edit-id').value='';
+  ['f-name','f-company','f-notes'].forEach(id => document.getElementById(id).value='');
+  document.getElementById('f-platform').value='linkedin';
+  document.getElementById('f-date').value=new Date().toISOString().slice(0,10);
+  document.getElementById('f-quality').value='warm';
+  document.getElementById('f-status').value='new';
+  document.getElementById('f-content').value='';
+  document.getElementById('f-clip').innerHTML='<option value="">-- Pilih Clip (opsional) --</option>';
+  document.getElementById('modal').classList.add('open');
+}
+
+function editInbound(id) {
+  const i = DB.getInbounds().find(x=>x.id===id); if(!i) return;
+  document.getElementById('modal-title').textContent='Edit Inbound';
+  document.getElementById('edit-id').value=id;
+  document.getElementById('f-name').value=i.name||'';
+  document.getElementById('f-company').value=i.company||'';
+  document.getElementById('f-platform').value=i.platform||'linkedin';
+  document.getElementById('f-date').value=i.date||'';
+  document.getElementById('f-quality').value=i.quality||'warm';
+  document.getElementById('f-status').value=i.status||'new';
+  document.getElementById('f-notes').value=i.notes||'';
+  document.getElementById('f-content').value=i.contentId||'';
+  onContentChange();
+  setTimeout(()=>{ document.getElementById('f-clip').value=i.clipId||''; },50);
+  document.getElementById('modal').classList.add('open');
+}
+
+function closeModal() { document.getElementById('modal').classList.remove('open'); }
+
+function saveInbound() {
+  const name = document.getElementById('f-name').value.trim();
+  if (!name) { showToast('Nama wajib diisi!','error'); return; }
+  const contentId = document.getElementById('f-content').value;
+  const clipId = document.getElementById('f-clip').value;
+  const content = contentId ? DB.getContent(contentId) : null;
+  const clip = clipId ? DB.getClips().find(c=>c.id===clipId) : null;
+  const data = { name, company:document.getElementById('f-company').value, platform:document.getElementById('f-platform').value, date:document.getElementById('f-date').value, quality:document.getElementById('f-quality').value, status:document.getElementById('f-status').value, notes:document.getElementById('f-notes').value, contentId, contentTitle:content?.title||'', clipId, clipAngle:clip?.angle||'' };
+  const editId = document.getElementById('edit-id').value;
+  if (editId) { DB.updateInbound(editId, data); showToast('Inbound diupdate!','success'); }
+  else { DB.addInbound(data); showToast('Inbound dicatat!','success'); }
+  closeModal(); render();
+}
+
+function deleteInbound(id) {
+  if (!confirm('Hapus inbound ini?')) return;
+  DB.deleteInbound(id); render(); showToast('Dihapus','info');
+}
+
+function fmtDate(d) { if(!d) return '—'; try { return new Date(d).toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'}); } catch(e) { return d; } }
+
+function showToast(msg, type='info') {
+  const t = document.createElement('div'); t.className=`toast ${type}`; t.textContent=msg;
+  document.getElementById('toast-wrap').appendChild(t); setTimeout(()=>t.remove(),3000);
+}
+
+populateContentSelect();
+renderKPIs();
+render();
+</script>
+</body>
+</html>

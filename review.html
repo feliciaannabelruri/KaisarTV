@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Review & Insight — KaisarTV</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="app-style.css"/>
+</head>
+<body>
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M8 6L16 12L8 18V6Z" fill="white"/></svg></div>
+    <div class="logo-text">KaisarTV<span>Content-to-Inbound</span></div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Menu</div>
+    <a class="nav-item" href="dashboard.html"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Dashboard</a>
+    <a class="nav-item" href="content.html"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 10l4.553-2.069A1 1 0 0121 8.82V15.18a1 1 0 01-1.447.89L15 14M3 8a2 2 0 012-2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"/></svg>Content Library</a>
+    <a class="nav-item" href="clips.html"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>Clip & Angle Mapper</a>
+    <a class="nav-item" href="distribution.html"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z"/></svg>Distribution Planner</a>
+    <a class="nav-item" href="inbound.html"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Inbound Tracker</a>
+    <a class="nav-item active" href="review.html"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Review & Insight</a>
+  </nav>
+
+</aside>
+
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-left"><h1>Review & Insight</h1><p>Evaluasi performa konten dan distribusi selama masa pilot</p></div>
+    <div class="topbar-right"><div class="mobile-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></div></div>
+  </div>
+  <div class="page-content">
+
+    <div class="two-col mb-20">
+      <div class="card">
+        <div class="card-header"><div class="card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Inbound per Konten</div></div>
+        <div class="card-body" id="chart-content"></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg> Inbound per Platform</div></div>
+        <div class="card-body" id="chart-platform"></div>
+      </div>
+    </div>
+
+    <div class="card mb-20">
+      <div class="card-header"><div class="card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg> Top Performing Angles (Berdasarkan Total Inbound)</div></div>
+      <div class="card-body" style="padding:0">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Rank</th><th>Angle / Hook</th><th>Total Inbound</th><th>Hot Leads</th><th>Deals</th></tr></thead>
+            <tbody id="table-angles"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><div class="card-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="11" r="5"></circle><line x1="12" y1="16" x2="12" y2="22"></line><line x1="9" y1="22" x2="15" y2="22"></line></svg> Insight Recommendation (AI-Simulated)</div></div>
+      <div class="card-body">
+        <div style="background:rgba(0,229,160,0.05);border:1px solid rgba(0,229,160,0.2);border-radius:12px;padding:20px;margin-bottom:16px">
+          <div style="font-weight:700;color:var(--green);margin-bottom:8px"><span style="color:var(--green)">✓</span> Apa yang berhasil (What worked)</div>
+          <ul style="padding-left:20px;font-size:13px;color:var(--muted2);line-height:1.6">
+            <li style="margin-bottom:4px">Platform <strong>LinkedIn</strong> menghasilkan <em>hot leads</em> paling banyak (CEO & Founder level).</li>
+            <li style="margin-bottom:4px">Angle seputar <strong>"Problem yang diabaikan brand"</strong> mendapatkan respon paling tinggi.</li>
+            <li style="margin-bottom:4px">CTA yang menawarkan <strong>"Diskusi 30 menit"</strong> (Lead Gen) lebih efektif dibanding minta follow.</li>
+          </ul>
+        </div>
+        <div style="background:rgba(255,107,53,0.05);border:1px solid rgba(255,107,53,0.2);border-radius:12px;padding:20px">
+          <div style="font-weight:700;color:var(--orange);margin-bottom:8px"><span style="color:var(--orange)">→</span> Rekomendasi Scale-up</div>
+          <ul style="padding-left:20px;font-size:13px;color:var(--muted2);line-height:1.6">
+            <li style="margin-bottom:4px">Fokus produksi konten baru dengan topik edukasi "kesalahan brand" untuk dipotong khusus LinkedIn.</li>
+            <li style="margin-bottom:4px">Kurangi frekuensi posting positioning di TikTok, pindahkan budget/effort ke Instagram Reels.</li>
+            <li style="margin-bottom:4px">Mulai siapkan <em>Landing Page</em> khusus partnership agar inbound flow lebih automated, tidak hanya DM.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="db.js"></script>
+<script>
+DB.seed();
+
+function renderContentChart() {
+  const map = DB.getInboundByContent();
+  const sorted = Object.entries(map).sort((a,b)=>b[1]-a[1]);
+  const total = DB.getInbounds().length || 1;
+  const el = document.getElementById('chart-content');
+  if(!sorted.length) { el.innerHTML='<div class="empty-state"><div class="empty-title">Belum ada data</div></div>'; return; }
+  el.innerHTML = `<div class="bar-chart-h">
+    ${sorted.map(([name,count])=>`
+      <div class="bar-h-item">
+        <div class="bar-h-label" title="${name}">${name}</div>
+        <div class="bar-h-track"><div class="bar-h-fill" style="width:${count/total*100}%"></div></div>
+        <div class="bar-h-val">${count}</div>
+      </div>
+    `).join('')}
+  </div>`;
+}
+
+function renderPlatformChart() {
+  const map = DB.getInboundByPlatform();
+  const sorted = Object.entries(map).sort((a,b)=>b[1]-a[1]);
+  const total = DB.getInbounds().length || 1;
+  const el = document.getElementById('chart-platform');
+  const colors = { linkedin:'var(--blue)', tiktok:'#ff0050', reels:'#e1306c', shorts:'#ff0000', dm:'var(--orange)', other:'var(--muted)' };
+  if(!sorted.length) { el.innerHTML='<div class="empty-state"><div class="empty-title">Belum ada data</div></div>'; return; }
+  el.innerHTML = `<div class="bar-chart-h">
+    ${sorted.map(([name,count])=>`
+      <div class="bar-h-item">
+        <div class="bar-h-label" style="text-transform:capitalize">${name}</div>
+        <div class="bar-h-track"><div class="bar-h-fill" style="width:${count/total*100}%;background:${colors[name]||'var(--orange)'}"></div></div>
+        <div class="bar-h-val">${count}</div>
+      </div>
+    `).join('')}
+  </div>`;
+}
+
+function renderTable() {
+  const inbounds = DB.getInbounds();
+  const map = {};
+  inbounds.forEach(i => {
+    const k = i.clipAngle || 'Unknown';
+    if(!map[k]) map[k] = { total:0, hot:0, deal:0 };
+    map[k].total++;
+    if(i.quality==='hot') map[k].hot++;
+    if(i.status==='deal') map[k].deal++;
+  });
+  const sorted = Object.entries(map).sort((a,b) => b[1].total - a[1].total).slice(0,10);
+  const tbody = document.getElementById('table-angles');
+  if(!sorted.length) { tbody.innerHTML='<tr><td colspan="5" style="text-align:center;padding:30px">Belum ada data insight</td></tr>'; return; }
+  tbody.innerHTML = sorted.map(([angle, stats], idx) => `
+    <tr>
+      <td><div style="width:24px;height:24px;border-radius:50%;background:var(--glass);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px">${idx+1}</div></td>
+      <td style="font-weight:600;font-size:13px">${angle}</td>
+      <td style="font-size:16px;font-weight:800;color:var(--orange)">${stats.total}</td>
+      <td><span class="badge badge-hot">${stats.hot}</span></td>
+      <td><span class="badge badge-deal">${stats.deal}</span></td>
+    </tr>
+  `).join('');
+}
+
+renderContentChart();
+renderPlatformChart();
+renderTable();
+</script>
+</body>
+</html>
